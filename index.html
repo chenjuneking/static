@@ -33,7 +33,7 @@
         var image = new Image();
         image.src = src;
         image.onload = function () {
-          preload(++index);
+          if (index < 9) preload(++index);
         }
       }
       preload(index);
