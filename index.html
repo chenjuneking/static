@@ -25,10 +25,17 @@
 
   <pre class="output"></pre>
   <script type="text/javascript">
-
+    (function () {
+      load(0);
+      function load (index) {
+        var src = 'assets/images/' + index + '.jpg';
+        var image = new Image();
+        image.src = src;
+        image.onload = function () { if (index < 9) load(++index) };
+      }
+    })();
     var garden = document.querySelector('.garden');
     var output = document.querySelector('.output');
-
     /* 摇一摇
       acceleration 和 accelerationIncludingGravity，都包含下面三个轴:
         x: 西向东
