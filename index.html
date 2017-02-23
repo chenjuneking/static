@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>全景图片</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" name="viewport">
+  <style type="text/css">
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    .garden {
+      position: fixed;
+      width : 100%;
+      height: 100%;
+      overflow: hidden;
+      background-image: url(assets/images/0.jpg);
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="garden"></div>
+
+  <pre class="output"></pre>
+  <script type="text/javascript">
+
+    var garden = document.querySelector('.garden');
+    var output = document.querySelector('.output');
+
+    /* 摇一摇
+      acceleration 和 accelerationIncludingGravity，都包含下面三个轴:
+        x: 西向东
+        y: 南向北
+        z: 垂直地面
+      rotationRate的情况有点不同：
+        alpha: 设备沿着垂直屏幕的轴的旋转速率 (桌面设备相对于键盘)
+        beta: 设备沿着屏幕左至右方向的轴的旋转速率(桌面设备相对于键盘)
+        gamma: 设备沿着屏幕下至上方向的轴的旋转速率(桌面设备相对于键盘)
+        最后，interval 表示的是从设备获取数据的频率，单位是毫秒。
+    */
+    var SHAKE_THRESHOLD = 500;
+    var lastUpdate = 0;
+    var x, y, z, lastX = 0, lastY = 0, lastZ = 0;
+    if (window.DeviceMotionEvent) window.addEventListener('devicemotion', deviceMotionHandler, false);
+    function deviceMotionHandler (event) {
+      var acceleration = event.accelerationIncludingGravity;
+      var currentTime = new Date().getTime();
+      if ((currentTime - lastUpdate)) {
+        var diffTime = currentTime - lastUpdate;
+        lastUpdate = currentTime;
+        x = acceleration.x;
+        y = acceleration.y;
+        z = acceleration.z;
+        var speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 1000;
+        if (speed > SHAKE_THRESHOLD) changeImage();
+        lastX = x;
+        lastY = y;
+        lastZ = z;
+      }
+    }
+    function changeImage () {
+      var r = Math.floor(Math.random() * 10);
+      garden.style.backgroundImage = 'url(assets/images/' + r + '.jpg)';
+    }
+
+    /* 全景图片
+    */
+    var imgWidth = 2100 * garden.clientHeight / 760;
+    var maxY = garden.clientWidth - imgWidth;
+    if (window.DeviceOrientationEvent) window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+    function deviceOrientationHandler (event) {
+      var y = event.gamma;
+      //output.innerHTML = 'gamma: ' + y;
+      y += 90; // 0 ~ 180
+      garden.style.backgroundPosition = (maxY * y / 180) + 'px 0';
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
