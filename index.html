@@ -18,16 +18,6 @@
       background-repeat: no-repeat;
       background-size: auto 100%;
     }
-    #preload-0 { background: url(assets/images/0.jpg) no-repeat 0 0; }
-    #preload-1 { background: url(assets/images/1.jpg) no-repeat 0 0; }
-    #preload-2 { background: url(assets/images/2.jpg) no-repeat 0 0; }
-    #preload-3 { background: url(assets/images/3.jpg) no-repeat 0 0; }
-    #preload-4 { background: url(assets/images/4.jpg) no-repeat 0 0; }
-    #preload-5 { background: url(assets/images/5.jpg) no-repeat 0 0; }
-    #preload-6 { background: url(assets/images/6.jpg) no-repeat 0 0; }
-    #preload-7 { background: url(assets/images/7.jpg) no-repeat 0 0; }
-    #preload-8 { background: url(assets/images/8.jpg) no-repeat 0 0; }
-    #preload-9 { background: url(assets/images/9.jpg) no-repeat 0 0; }
   </style>
 </head>
 <body>
@@ -35,17 +25,19 @@
 
   <pre class="output"></pre>
 
-  <div id="preload-0"></div>
-  <div id="preload-1"></div>
-  <div id="preload-2"></div>
-  <div id="preload-3"></div>
-  <div id="preload-4"></div>
-  <div id="preload-5"></div>
-  <div id="preload-6"></div>
-  <div id="preload-7"></div>
-  <div id="preload-8"></div>
-  <div id="preload-9"></div>
   <script type="text/javascript">
+    window.onload = function () {
+      var index = 0;
+      var preload = function (index) {
+        var src = 'assets/images/' + index + '.jpg';
+        var image = new Image();
+        image.src = src;
+        image.onload = function () {
+          preload(++index);
+        }
+      }
+      preload(index);
+    }
     var garden = document.querySelector('.garden');
     var output = document.querySelector('.output');
     /* 摇一摇
